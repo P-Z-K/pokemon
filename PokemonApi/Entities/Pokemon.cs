@@ -31,7 +31,9 @@ public class Pokemon
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
     
+    [MaxLength(255)]
     public string Name { get; set; }
+    
     public Type Type { get; set; }
     public int Health { get; set; }
     public int Attack { get; set; }
