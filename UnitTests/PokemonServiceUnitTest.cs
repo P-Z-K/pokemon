@@ -4,6 +4,8 @@ using PokemonApi.Context;
 using PokemonApi.Entities;
 using PokemonApi.Models;
 using PokemonApi.Services;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
 using Type = PokemonApi.Entities.Type;
 
 namespace UnitTests;
@@ -34,6 +36,7 @@ public class PokemonServiceUnitTest
         SpecialDefense = 10,
         Speed = 25
     };
+
     
     private readonly Pokemon _charmanderEntity = new()
     {
@@ -68,7 +71,30 @@ public class PokemonServiceUnitTest
 
         Assert.True(isSuccess);
     }
-    
+
+    [Fact]
+    public void Create_SinglePokemonWithBadName_ThrowsValidationException()
+    {
+        var badName = new StringBuilder("a");
+
+        for (var i = 0; i < 260; i++)
+        {
+            badName.Append("a");
+        }
+        PokemonDto badPokemonDto = new()
+        {
+            Name = badName.ToString(),
+            Type = Type.Fire,
+            Attack = 15,
+            Defense = 10,
+            Health = 15,
+            SpecialAttack = 15,
+            SpecialDefense = 5,
+            Speed = 15
+        };
+        Assert.Throws<ValidationException>(_pokemonService.Create(badPokemonDto));
+    }
+
     [Fact]
     public void Delete_ExistingPokemon_ReturnsTrue()
     {
