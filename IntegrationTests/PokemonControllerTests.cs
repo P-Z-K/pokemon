@@ -74,4 +74,34 @@ public class PokemonControllerTests : IClassFixture<WebApplicationFactory<Progra
         var response = await _httpClient.PostAsync("/api/pokemon/", httpContent);
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
     }
+
+    [Fact]
+    public async Task Post_WithInvalidName_ReturnsBadRequest()
+    {
+        var badName = new StringBuilder("a");
+
+        for(var i = 0; i < 260; i++)
+        {
+            badName.Append("a");
+        }
+
+        PokemonDto badPokemonDto = new()
+        {
+            Name = badName.ToString(),
+            Type = Type.Grass,
+            Attack = 0,
+            Defense = 0,
+            Health = 2,
+            SpecialAttack = 0,
+            SpecialDefense = 0,
+            Speed = 0
+        };
+
+        var pokemonJson = JsonConvert.SerializeObject(badPokemonDto);
+
+        var httpContent = new StringContent(pokemonJson, Encoding.UTF8, "application/json");
+
+        var response = await _httpClient.PostAsync("/api/pokemon/", httpContent);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
 }
