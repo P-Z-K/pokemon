@@ -142,6 +142,6 @@ public class PokemonServiceUnitTest
             _context.Pokemons.Add(_charmanderEntity);
         }
         List<Pokemon> pokemons = _pokemonService.GetAll();
-        Assert.True(pokemons.Any());
+        Assert.Equal(pokemons.Count(), 5);
     }
 }
