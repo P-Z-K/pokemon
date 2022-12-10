@@ -10,30 +10,30 @@ public class PokemonController : ControllerBase
     [HttpGet("all")]
     public IActionResult GetAll()
     {
-        return BadRequest();
+        throw new NotImplementedException();
     }
 
     [HttpGet("{id:int}")]
     public IActionResult Get(int id)
     {
-        return BadRequest();
+        throw new NotImplementedException();
     }
 
     [HttpPost]
     public IActionResult Post([FromBody] PokemonDto dto)
     {
-        return BadRequest();
+        throw new NotImplementedException();
     }
 
     [HttpPut]
     public IActionResult Put([FromBody] PokemonDto dto)
     {
-        return BadRequest();
+        throw new NotImplementedException();
     }
 
     [HttpDelete("{id:int}")]
     public IActionResult Delete(int id)
     {
-        return BadRequest();
+        throw new NotImplementedException();
     }
 }

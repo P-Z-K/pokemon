@@ -1,0 +1,11 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=0b144db9_002D65ca_002D4e31_002D8984_002D353e6a965a60/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Get_WithNotExistingId_ReturnsEmptyJson #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::9CD1A4A3-BA5E-4100-88AF-906495C94C54::net6.0::IntegrationTests.PokemonControllerTests.Get_WithNotExistingId_ReturnsEmptyJson&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=0e995428_002D2745_002D4699_002Db2c7_002D43b061eee40b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Get_WithNotExistingId_ReturnsEmptyJson" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::9CD1A4A3-BA5E-4100-88AF-906495C94C54::net6.0::IntegrationTests.PokemonControllerTests.Get_WithNotExistingId_ReturnsEmptyString&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

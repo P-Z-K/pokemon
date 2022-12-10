@@ -1,4 +1,6 @@
-﻿namespace PokemonApi.Models;
+﻿using Type = PokemonApi.Entities.Type;
+
+namespace PokemonApi.Models;
 
 public class PokemonDto
 {
