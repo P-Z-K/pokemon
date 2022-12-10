@@ -25,6 +25,7 @@ public class PokemonControllerTests : IClassFixture<WebApplicationFactory<Progra
         Speed = 15
     };
 
+
     public PokemonControllerTests(WebApplicationFactory<Program> factory)
     {
         _httpClient = factory
@@ -103,5 +104,30 @@ public class PokemonControllerTests : IClassFixture<WebApplicationFactory<Progra
 
         var response = await _httpClient.PostAsync("/api/pokemon/", httpContent);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Put_WithValidModel_ReturnsOkStatus()
+    {
+        var pokemonJson = JsonConvert.SerializeObject(_charmanderDto);
+        var httpContent = new StringContent(pokemonJson, Encoding.UTF8, "application/json");
+        var response = await _httpClient.PostAsync("/api/pokemon/", httpContent);
+
+        PokemonDto _charmanderToUpdate = new()
+        {
+            Id = _charmanderDto.Id,
+            Attack = 35,
+            Defense = 5,
+            Health = 15,
+            SpecialAttack = 20,
+            SpecialDefense = 10,
+            Speed = 25
+        };
+
+        var pokemonJsonUpd = JsonConvert.SerializeObject(_charmanderToUpdate);
+        var httpContentUpd = new StringContent(pokemonJson, Encoding.UTF8, "application/json");
+        response = await _httpClient.PutAsync("/api/pokemon/", httpContentUpd);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
     }
 }

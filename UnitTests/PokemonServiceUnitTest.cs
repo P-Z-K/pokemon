@@ -127,6 +127,13 @@ public class PokemonServiceUnitTest
         
         Assert.NotNull(_pokemonService.GetById(createdPokemon.Entity.Id));
     }
+
+    [Fact]
+    public void GetById_InvalidId_ThrowsArgumentException()
+    {
+        Assert.Throws<ArgumentException>(_pokemonService.GetById(-1));
+    }
+
     [Fact]
     public void GetAll_ExistingPokemon_ReturnsPokemonList()
     {
