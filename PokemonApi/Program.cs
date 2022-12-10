@@ -1,10 +1,16 @@
 
+using Microsoft.EntityFrameworkCore;
+using PokemonApi.Context;
+
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddDbContext<DatabaseContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")));
 
 var app = builder.Build();
 
