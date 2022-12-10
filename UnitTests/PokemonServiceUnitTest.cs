@@ -106,7 +106,7 @@ public class PokemonServiceUnitTest
         Assert.True(_pokemonService.Delete(id));
         Assert.Null(_context.Pokemons.FirstOrDefault(p => p.Id == id));
     }
-    
+
     [Fact]
     public void Update_ExistingPokemon_ReturnsUpdatedPokemon()
     {
@@ -126,5 +126,15 @@ public class PokemonServiceUnitTest
         
         
         Assert.NotNull(_pokemonService.GetById(createdPokemon.Entity.Id));
+    }
+    [Fact]
+    public void GetAll_ExistingPokemon_ReturnsPokemonList()
+    {
+        for(var i = 0; i < 5; i++)
+        {
+            _context.Pokemons.Add(_charmanderEntity);
+        }
+        List<Pokemon> pokemons = _pokemonService.GetAll();
+        Assert.True(pokemons.Any());
     }
 }
