@@ -50,6 +50,18 @@ public class PokemonServiceUnitTest
         Speed = 15
     };
 
+    private readonly Pokemon _badCharmanderDto = new()
+    {
+        Name = new string('a', 260),
+        Type = Type.Fire,
+        Attack = 15,
+        Defense = 10,
+        Health = 15,
+        SpecialAttack = 15,
+        SpecialDefense = 5,
+        Speed = 15
+    };
+
     public PokemonServiceUnitTest()
     {
         var contextOptions = new DbContextOptionsBuilder<DatabaseContext>()
