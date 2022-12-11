@@ -25,6 +25,7 @@ public class PokemonControllerTests : IClassFixture<WebApplicationFactory<Progra
         Speed = 15
     };
 
+
     public PokemonControllerTests(WebApplicationFactory<Program> factory)
     {
         _httpClient = factory
@@ -73,5 +74,60 @@ public class PokemonControllerTests : IClassFixture<WebApplicationFactory<Progra
 
         var response = await _httpClient.PostAsync("/api/pokemon/", httpContent);
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Post_WithInvalidName_ReturnsBadRequest()
+    {
+        var badName = new StringBuilder("a");
+
+        for(var i = 0; i < 260; i++)
+        {
+            badName.Append("a");
+        }
+
+        PokemonDto badPokemonDto = new()
+        {
+            Name = badName.ToString(),
+            Type = Type.Grass,
+            Attack = 0,
+            Defense = 0,
+            Health = 2,
+            SpecialAttack = 0,
+            SpecialDefense = 0,
+            Speed = 0
+        };
+
+        var pokemonJson = JsonConvert.SerializeObject(badPokemonDto);
+
+        var httpContent = new StringContent(pokemonJson, Encoding.UTF8, "application/json");
+
+        var response = await _httpClient.PostAsync("/api/pokemon/", httpContent);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Put_WithValidModel_ReturnsOkStatus()
+    {
+        var pokemonJson = JsonConvert.SerializeObject(_charmanderDto);
+        var httpContent = new StringContent(pokemonJson, Encoding.UTF8, "application/json");
+        var response = await _httpClient.PostAsync("/api/pokemon/", httpContent);
+
+        PokemonDto _charmanderToUpdate = new()
+        {
+            Id = _charmanderDto.Id,
+            Attack = 35,
+            Defense = 5,
+            Health = 15,
+            SpecialAttack = 20,
+            SpecialDefense = 10,
+            Speed = 25
+        };
+
+        var pokemonJsonUpd = JsonConvert.SerializeObject(_charmanderToUpdate);
+        var httpContentUpd = new StringContent(pokemonJson, Encoding.UTF8, "application/json");
+        response = await _httpClient.PutAsync("/api/pokemon/", httpContentUpd);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
     }
 }
