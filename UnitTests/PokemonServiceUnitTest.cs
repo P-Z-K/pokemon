@@ -50,7 +50,7 @@ public class PokemonServiceUnitTest
         Speed = 15
     };
 
-    private readonly Pokemon _badCharmanderDto = new()
+    private readonly PokemonDto _badCharmanderDto = new()
     {
         Name = new string('a', 260),
         Type = Type.Fire,
@@ -87,24 +87,16 @@ public class PokemonServiceUnitTest
     [Fact]
     public void Create_SinglePokemonWithBadName_ThrowsValidationException()
     {
-        var badName = new StringBuilder("a");
+        Assert.Throws<ValidationException>(_pokemonService.Create(_badCharmanderDto));
+    }
 
-        for (var i = 0; i < 260; i++)
-        {
-            badName.Append("a");
-        }
-        PokemonDto badPokemonDto = new()
-        {
-            Name = badName.ToString(),
-            Type = Type.Fire,
-            Attack = 15,
-            Defense = 10,
-            Health = 15,
-            SpecialAttack = 15,
-            SpecialDefense = 5,
-            Speed = 15
-        };
-        Assert.Throws<ValidationException>(_pokemonService.Create(badPokemonDto));
+    [Fact]
+    public void Update_SinglePokemonWithBadName_ThrowsValidationException()
+    {
+        var createdPokemon = _context.Pokemons.Add(_charmanderEntity);
+        _context.SaveChanges();
+
+        Assert.Throws<ValidationException>(_pokemonService.Update(_badCharmanderDto));
     }
 
     [Fact]
