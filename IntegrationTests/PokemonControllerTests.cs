@@ -50,11 +50,14 @@ public class PokemonControllerTests : IClassFixture<WebApplicationFactory<Progra
         
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
-    
-    [Fact]
-    public async Task Get_WithNotExistingId_ReturnsNoContentStatus()
+
+    [Theory]
+    [InlineData(-1)]
+    [InlineData(-3)]
+    [InlineData(100)]
+    public async Task Get_WithNotExistingId_ReturnsNoContentStatus(int id)
     {
-        var response = await _httpClient.GetAsync($"api/pokemon/{-1}");
+        var response = await _httpClient.GetAsync($"api/pokemon/{id}");
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
     
