@@ -128,20 +128,26 @@ public class PokemonServiceUnitTest
         Assert.NotNull(_pokemonService.GetById(createdPokemon.Entity.Id));
     }
 
-    [Fact]
-    public void GetById_InvalidId_ThrowsArgumentException()
+    [Theory]
+    [InlineData(-1)]
+    [InlineData(-3)]
+    [InlineData(100)]
+    public void GetById_InvalidId_ThrowsArgumentException(int id)
     {
-        Assert.Throws<ArgumentException>(_pokemonService.GetById(-1));
+        Assert.Throws<ArgumentException>(_pokemonService.GetById(id));
     }
 
-    [Fact]
-    public void GetAll_ExistingPokemon_ReturnsPokemonList()
+    [Theory]
+    [InlineData(5)]
+    [InlineData(10)]
+    [InlineData(15)]
+    public void GetAll_ExistingPokemon_ReturnsPokemonList(int count)
     {
-        for(var i = 0; i < 5; i++)
+        for(var i = 0; i < count; i++)
         {
             _context.Pokemons.Add(_charmanderEntity);
         }
         List<Pokemon> pokemons = _pokemonService.GetAll();
-        Assert.Equal(pokemons.Count(), 5);
+        Assert.Equal(pokemons.Count(), count);
     }
 }
