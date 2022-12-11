@@ -126,4 +126,29 @@ public class PokemonControllerTests : IClassFixture<WebApplicationFactory<Progra
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
     }
+
+    [Fact]
+    public async Task Put_WithInvalidModel_ReturnsBadRequest()
+    {
+        var pokemonJson = JsonConvert.SerializeObject(_charmanderDto);
+        var httpContent = new StringContent(pokemonJson, Encoding.UTF8, "application/json");
+        var response = await _httpClient.PostAsync("/api/pokemon/", httpContent);
+
+        PokemonDto _charmanderToUpdate = new()
+        {
+            Id = _charmanderDto.Id,
+            Name = new string('a', 260),
+            Attack = 35,
+            Defense = 5,
+            Health = 15,
+            SpecialAttack = 20,
+            SpecialDefense = 10,
+            Speed = 25
+        };
+
+        var pokemonJsonUpd = JsonConvert.SerializeObject(_charmanderToUpdate);
+        var httpContentUpd = new StringContent(pokemonJson, Encoding.UTF8, "application/json");
+        response = await _httpClient.PutAsync("/api/pokemon/", httpContentUpd);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
 }
