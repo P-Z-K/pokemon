@@ -50,6 +50,18 @@ public class PokemonServiceUnitTest
         Speed = 15
     };
 
+    private readonly PokemonDto _badCharmanderDto = new()
+    {
+        Name = new string('a', 260),
+        Type = Type.Fire,
+        Attack = 15,
+        Defense = 10,
+        Health = 15,
+        SpecialAttack = 15,
+        SpecialDefense = 5,
+        Speed = 15
+    };
+
     public PokemonServiceUnitTest()
     {
         var contextOptions = new DbContextOptionsBuilder<DatabaseContext>()
@@ -75,24 +87,16 @@ public class PokemonServiceUnitTest
     [Fact]
     public void Create_SinglePokemonWithBadName_ThrowsValidationException()
     {
-        var badName = new StringBuilder("a");
+        Assert.Throws<ValidationException>(_pokemonService.Create(_badCharmanderDto));
+    }
 
-        for (var i = 0; i < 260; i++)
-        {
-            badName.Append("a");
-        }
-        PokemonDto badPokemonDto = new()
-        {
-            Name = badName.ToString(),
-            Type = Type.Fire,
-            Attack = 15,
-            Defense = 10,
-            Health = 15,
-            SpecialAttack = 15,
-            SpecialDefense = 5,
-            Speed = 15
-        };
-        Assert.Throws<ValidationException>(_pokemonService.Create(badPokemonDto));
+    [Fact]
+    public void Update_SinglePokemonWithBadName_ThrowsValidationException()
+    {
+        var createdPokemon = _context.Pokemons.Add(_charmanderEntity);
+        _context.SaveChanges();
+
+        Assert.Throws<ValidationException>(_pokemonService.Update(_badCharmanderDto));
     }
 
     [Fact]
@@ -128,20 +132,26 @@ public class PokemonServiceUnitTest
         Assert.NotNull(_pokemonService.GetById(createdPokemon.Entity.Id));
     }
 
-    [Fact]
-    public void GetById_InvalidId_ThrowsArgumentException()
+    [Theory]
+    [InlineData(-1)]
+    [InlineData(-3)]
+    [InlineData(100)]
+    public void GetById_InvalidId_ThrowsArgumentException(int id)
     {
-        Assert.Throws<ArgumentException>(_pokemonService.GetById(-1));
+        Assert.Throws<ArgumentException>(_pokemonService.GetById(id));
     }
 
-    [Fact]
-    public void GetAll_ExistingPokemon_ReturnsPokemonList()
+    [Theory]
+    [InlineData(5)]
+    [InlineData(10)]
+    [InlineData(15)]
+    public void GetAll_ExistingPokemon_ReturnsPokemonList(int count)
     {
-        for(var i = 0; i < 5; i++)
+        for(var i = 0; i < count; i++)
         {
             _context.Pokemons.Add(_charmanderEntity);
         }
         List<Pokemon> pokemons = _pokemonService.GetAll();
-        Assert.Equal(pokemons.Count(), 5);
+        Assert.Equal(pokemons.Count(), count);
     }
 }
