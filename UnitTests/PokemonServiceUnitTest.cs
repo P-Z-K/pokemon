@@ -4,8 +4,7 @@ using PokemonApi.Context;
 using PokemonApi.Entities;
 using PokemonApi.Models;
 using PokemonApi.Services;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+using PokemonApi.Exceptions;
 using Type = PokemonApi.Entities.Type;
 
 namespace UnitTests;
@@ -85,18 +84,18 @@ public class PokemonServiceUnitTest
     }
 
     [Fact]
-    public void Create_SinglePokemonWithBadName_ThrowsValidationException()
+    public void Create_SinglePokemonWithBadName_ThrowsEntityBadDtoException()
     {
-        Assert.Throws<ValidationException>(_pokemonService.Create(_badCharmanderDto));
+        Assert.Throws<EntityBadDto>(() => _pokemonService.Create(_badCharmanderDto));
     }
 
     [Fact]
-    public void Update_SinglePokemonWithBadName_ThrowsValidationException()
+    public void Update_SinglePokemonWithBadName_ThrowsEntityBadDtoException()
     {
         var createdPokemon = _context.Pokemons.Add(_charmanderEntity);
         _context.SaveChanges();
 
-        Assert.Throws<ValidationException>(_pokemonService.Update(_badCharmanderDto));
+        Assert.Throws<EntityBadDto>(() => _pokemonService.Update(_badCharmanderDto));
     }
 
     [Fact]
@@ -116,7 +115,8 @@ public class PokemonServiceUnitTest
     {
         var createdPokemon = _context.Pokemons.Add(_charmanderEntity);
         _context.SaveChanges();
-        
+
+        _charmanderToUpdate.Id = createdPokemon.Entity.Id;
         var updatedPokemon = _pokemonService.Update(_charmanderToUpdate);
         
         Assert.NotNull(updatedPokemon);
@@ -136,22 +136,32 @@ public class PokemonServiceUnitTest
     [InlineData(-1)]
     [InlineData(-3)]
     [InlineData(100)]
-    public void GetById_InvalidId_ThrowsArgumentException(int id)
+    public void GetById_InvalidId_ThrowsEntityNotFoundException(int id)
     {
-        Assert.Throws<ArgumentException>(_pokemonService.GetById(id));
+        Assert.Throws<EntityNotFound>(() => _pokemonService.GetById(id));
     }
 
     [Theory]
     [InlineData(5)]
     [InlineData(10)]
     [InlineData(15)]
-    public void GetAll_ExistingPokemon_ReturnsPokemonList(int count)
+    public void GetAll_ExistingPokemons_ReturnsPokemonList(int pokemonCount)
     {
-        for(var i = 0; i < count; i++)
+        var pokemons = Enumerable.Repeat(new Pokemon()
         {
-            _context.Pokemons.Add(_charmanderEntity);
-        }
-        List<Pokemon> pokemons = _pokemonService.GetAll();
-        Assert.Equal(pokemons.Count(), count);
+            Name = "Charmander",
+            Type = Type.Fire,
+            Attack = 15,
+            Defense = 10,
+            Health = 15,
+            SpecialAttack = 15,
+            SpecialDefense = 5,
+            Speed = 15
+        }, pokemonCount).ToList();
+        
+        _context.Pokemons.AddRange(pokemons);
+        _context.SaveChanges();
+        
+        Assert.Equal(pokemonCount, _pokemonService.GetAll().Count);
     }
 }

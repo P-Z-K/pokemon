@@ -1,6 +1,6 @@
-
 using Microsoft.EntityFrameworkCore;
 using PokemonApi.Context;
+using PokemonApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +21,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
