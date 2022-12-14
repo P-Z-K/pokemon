@@ -148,9 +148,9 @@ public class PokemonServiceUnitTest
     public void GetAll_ExistingPokemons_ReturnsPokemonList(int pokemonCount)
     {
         var pokemons = new List<Pokemon>();
-        for (int i = 0; i < pokemonCount; i++)
+        for(int i = 0; i < pokemonCount; i++)
         {
-            var p = new Pokemon()
+            pokemons.Add(new Pokemon()
             {
                 Name = "Charmander",
                 Type = Type.Fire,
@@ -160,13 +160,12 @@ public class PokemonServiceUnitTest
                 SpecialAttack = 15,
                 SpecialDefense = 5,
                 Speed = 15
-            };
-            pokemons.Add(p);
+            });
         }
-
+        
         _context.AddRange(pokemons);
         _context.SaveChanges();
-
+        
         Assert.Equal(pokemonCount, _pokemonService.GetAll().Count);
     }
 }
