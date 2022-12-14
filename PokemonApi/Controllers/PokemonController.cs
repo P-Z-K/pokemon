@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PokemonApi.Context;
 using PokemonApi.Models;
+using PokemonApi.Services;
 
 namespace PokemonApi.Controllers;
 
@@ -7,33 +9,41 @@ namespace PokemonApi.Controllers;
 [ApiController]
 public class PokemonController : ControllerBase
 {
+    private readonly PokemonService _pokemonService;
+
+    public PokemonController(PokemonService pokemonService)
+    {
+        _pokemonService = pokemonService;
+    }
+
     [HttpGet("all")]
     public IActionResult GetAll()
     {
-        throw new NotImplementedException();
+        return Ok(_pokemonService.GetAll());
     }
 
     [HttpGet("{id:int}")]
     public IActionResult Get(int id)
     {
-        throw new NotImplementedException();
+        return Ok(_pokemonService.GetById(id));
     }
 
     [HttpPost]
     public IActionResult Post([FromBody] PokemonDto dto)
     {
-        throw new NotImplementedException();
+        _pokemonService.Create(dto);
+        return Ok();
     }
 
     [HttpPut]
     public IActionResult Put([FromBody] PokemonDto dto)
     {
-        throw new NotImplementedException();
+        return Ok(_pokemonService.Update(dto));
     }
 
     [HttpDelete("{id:int}")]
     public IActionResult Delete(int id)
     {
-        throw new NotImplementedException();
+        return Ok(_pokemonService.Delete(id));
     }
 }
