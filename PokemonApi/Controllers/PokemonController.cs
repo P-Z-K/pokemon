@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PokemonApi.Context;
 using PokemonApi.Models;
 using PokemonApi.Services;
 
@@ -9,6 +10,11 @@ namespace PokemonApi.Controllers;
 public class PokemonController : ControllerBase
 {
     private readonly PokemonService _pokemonService;
+
+    public PokemonController(PokemonService pokemonService)
+    {
+        _pokemonService = pokemonService;
+    }
 
     [HttpGet("all")]
     public IActionResult GetAll()
