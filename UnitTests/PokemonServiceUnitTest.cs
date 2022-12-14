@@ -159,7 +159,7 @@ public class PokemonServiceUnitTest
             Speed = 15
         }, pokemonCount).ToList();
         
-        _context.Pokemons.AddRange(pokemons);
+        _context.AddRange(pokemons);
         _context.SaveChanges();
         
         Assert.Equal(pokemonCount, _pokemonService.GetAll().Count);

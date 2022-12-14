@@ -58,7 +58,7 @@ public class PokemonControllerTests : IClassFixture<WebApplicationFactory<Progra
     [Fact]
     public async Task GetAll_WithNoParameters_ReturnsOkStatus()
     {
-        var response = await _httpClient.GetAsync("/api/pokemon/all");
+        var response = await _httpClient.GetAsync("api/pokemon/all");
         
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
@@ -72,14 +72,7 @@ public class PokemonControllerTests : IClassFixture<WebApplicationFactory<Progra
         var response = await _httpClient.GetAsync($"api/pokemon/{id}");
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
-    
-    [Fact]
-    public async Task Get_WithExistingId_ReturnsOkStatus()
-    {
-        var response = await _httpClient.GetAsync($"api/pokemon/{1}");
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-    }
-    
+
     [Fact]
     public async Task Post_WithValidModel_ReturnsCreatedStatus()
     {
@@ -87,8 +80,8 @@ public class PokemonControllerTests : IClassFixture<WebApplicationFactory<Progra
         
         var httpContent = new StringContent(pokemonJson, Encoding.UTF8, "application/json");
 
-        var response = await _httpClient.PostAsync("/api/pokemon/", httpContent);
-        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        var response = await _httpClient.PostAsync("api/pokemon/", httpContent);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
     [Fact]
@@ -98,17 +91,13 @@ public class PokemonControllerTests : IClassFixture<WebApplicationFactory<Progra
 
         var httpContent = new StringContent(pokemonJson, Encoding.UTF8, "application/json");
 
-        var response = await _httpClient.PostAsync("/api/pokemon/", httpContent);
+        var response = await _httpClient.PostAsync("api/pokemon/", httpContent);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
     [Fact]
-    public async Task Put_WithValidModel_ReturnsOkStatus()
+    public async Task Put_WithValidModelAndNotExistingEntity_ReturnsNoContent()
     {
-        var pokemonJson = JsonConvert.SerializeObject(_charmanderDto);
-        var httpContent = new StringContent(pokemonJson, Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync("/api/pokemon/", httpContent);
-
         PokemonDto _charmanderToUpdate = new()
         {
             Id = _charmanderDto.Id,
@@ -120,20 +109,15 @@ public class PokemonControllerTests : IClassFixture<WebApplicationFactory<Progra
             Speed = 25
         };
 
-        var pokemonJsonUpd = JsonConvert.SerializeObject(_charmanderToUpdate);
-        var httpContentUpd = new StringContent(pokemonJson, Encoding.UTF8, "application/json");
-        response = await _httpClient.PutAsync("/api/pokemon/", httpContentUpd);
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
+        var pokemonJson = JsonConvert.SerializeObject(_charmanderToUpdate);
+        var httpContent = new StringContent(pokemonJson, Encoding.UTF8, "application/json");
+        var response = await _httpClient.PutAsync("api/pokemon/", httpContent);
+        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
 
     [Fact]
     public async Task Put_WithInvalidModel_ReturnsBadRequest()
     {
-        var pokemonJson = JsonConvert.SerializeObject(_charmanderDto);
-        var httpContent = new StringContent(pokemonJson, Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync("/api/pokemon/", httpContent);
-
         PokemonDto _charmanderToUpdate = new()
         {
             Id = _charmanderDto.Id,
@@ -146,9 +130,9 @@ public class PokemonControllerTests : IClassFixture<WebApplicationFactory<Progra
             Speed = 25
         };
 
-        var pokemonJsonUpd = JsonConvert.SerializeObject(_charmanderToUpdate);
-        var httpContentUpd = new StringContent(pokemonJson, Encoding.UTF8, "application/json");
-        response = await _httpClient.PutAsync("/api/pokemon/", httpContentUpd);
+        var pokemonJson = JsonConvert.SerializeObject(_charmanderToUpdate);
+        var httpContent = new StringContent(pokemonJson, Encoding.UTF8, "application/json");
+        var response = await _httpClient.PutAsync("api/pokemon/", httpContent);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 }
